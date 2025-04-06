@@ -1,5 +1,5 @@
 {
-  "name": "Scaffold",
+  "name": "Havenhollow",
   "tree": {
     "$className": "DataModel",
 
@@ -16,6 +16,9 @@
       "Assets": {
         "$ignoreUnknownInstances": true,
         "$path": "src/assets"
+      },
+      "LoadingScreen": {
+        "$path": "src/LoadingScreen.luau"
       }
     },
 

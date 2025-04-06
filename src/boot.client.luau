@@ -1,22 +1,27 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local LoadingScreen = require(ReplicatedStorage.LoadingScreen)
 local Sandwich = require(ReplicatedStorage.Packages.Sandwich)
 local Schedules = require(ReplicatedStorage.Shared.Schedules)
 
-print("INITIALIZING CLIENT")
-print("-------------------")
+LoadingScreen.AddTask(workspace, "MAP")
 
-Schedules["Boot"] = Sandwich.schedule()
+LoadingScreen.AddTask(function()
+	Schedules["Boot"] = Sandwich.schedule()
 
-for _, module in ReplicatedStorage.Modules:GetDescendants() do
-	if not module:IsA("ModuleScript") then continue end
+	for _, module in ReplicatedStorage.Modules:GetDescendants() do
+		if not module:IsA("ModuleScript") then continue end
 
-	print("INITIALIZING " .. module.Name)
+		require(module)
+	end
+end, "MODULES")
 
-	require(module)
-end
+LoadingScreen.AddTask(ReplicatedStorage.Assets, "ASSETS")
 
-print("-------------------")
-print("CLIENT INITIALIZED")
+LoadingScreen.AddTask(function()
+	Schedules["Boot"].start()
+end, "BOOT SEQUENCE")
 
-Schedules["Boot"].start()
+task.wait()
+
+LoadingScreen.Boot()
